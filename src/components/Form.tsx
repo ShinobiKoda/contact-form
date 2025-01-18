@@ -1,7 +1,7 @@
 const Form = () => {
   return (
     <div className="w-full flex items-center justify-center px-3 py-[8rem] lg:h-screen">
-      <form className="bg-white w-full rounded-md max-w-[600px] mx-auto px-6 py-4 flex flex-col gap-8">
+      <form className="bg-white w-full rounded-md max-w-[700px] mx-auto px-6 py-4 flex flex-col gap-8">
         <h1 className="text-2xl font-extrabold">Contact Us</h1>
 
         <div className="flex flex-col gap-8 md:flex-row lg:justify-between">
