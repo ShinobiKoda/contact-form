@@ -1,11 +1,11 @@
 const Form = () => {
   return (
-    <div className="w-full flex items-center justify-center px-3 py-[2rem] lg:h-screen">
+    <div className="w-full flex items-center justify-center px-3 py-[8rem] lg:h-screen">
       <form className="bg-white w-full rounded-md max-w-[600px] mx-auto px-6 py-4 flex flex-col gap-8">
         <h1 className="text-2xl font-extrabold">Contact Us</h1>
 
-        <div className="flex flex-col gap-8 lg:flex-row lg:justify-between">
-          <div className="relative lg:flex-1">
+        <div className="flex flex-col gap-8 md:flex-row lg:justify-between">
+          <div className="relative md:flex-1">
             <input
               type="text"
               name="first-name"
@@ -21,7 +21,7 @@ const Form = () => {
             </label>
           </div>
 
-          <div className="relative lg:flex-1">
+          <div className="relative md:flex-1">
             <input
               type="text"
               name="last-name"
@@ -55,8 +55,8 @@ const Form = () => {
         </div>
 
         <div className="flex flex-col gap-4">
-          <label htmlFor="query">Query Type</label>
-          <div className="flex flex-col gap-4 lg:flex-row justify-between">
+          <label htmlFor="query" className="font-bold text-xl">Query Type</label>
+          <div className="flex flex-col gap-4 md:flex-row justify-between">
             <div className="flex items-center gap-3 border-2 p-2 rounded-md flex-1">
               <input type="radio" name="query" id="query" />
               <label htmlFor="query">General Query</label>
@@ -69,7 +69,7 @@ const Form = () => {
         </div>
 
         <div className="flex flex-col gap-2">
-          <label htmlFor="message">Message</label>
+          <label htmlFor="message" className="font-bold text-xl">Message</label>
           <textarea
             name="message"
             id="message"
