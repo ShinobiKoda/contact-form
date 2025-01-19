@@ -74,7 +74,7 @@ const Form = () => {
             name="message"
             id="message"
             rows={5}
-            className="border border-gray-300"
+            className="border border-gray-300 p-3"
           ></textarea>
         </div>
 
