@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Toast from "./Toast";
 
 type FormValues = {
   firstName: string;
@@ -29,73 +30,79 @@ const Form = () => {
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const validate = (): boolean => {
     const newErrors: FormErrors = {};
 
-    // Validate first name
-    if (!values.firstName.trim()) {
-      newErrors.firstName = "Enter your first name.";
-    }
-
-    // Validate last name
-    if (!values.lastName.trim()) {
-      newErrors.lastName = "Enter your last name.";
-    }
-
-    // Validate email
+    if (!values.firstName.trim()) newErrors.firstName = "Enter your first name.";
+    if (!values.lastName.trim()) newErrors.lastName = "Enter your last name.";
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!values.email.trim()) {
-      newErrors.email = "Email is required.";
-    } else if (!emailRegex.test(values.email)) {
-      newErrors.email = "Please enter a valid email address.";
-    }
-
-    // Validate query type
-    if (!values.queryType) {
-      newErrors.queryType = "Please select a query type.";
-    }
-
-    // Validate message (optional)
-    if (!values.message.trim()) {
-      newErrors.message = "Please enter your message.";
-    }
-
-    // Validate agreement
-    if (!values.agree) {
-      newErrors.agree = "You must agree to be contacted.";
-    }
+    if (!values.email.trim()) newErrors.email = "Email is required.";
+    else if (!emailRegex.test(values.email)) newErrors.email = "Invalid email address.";
+    if (!values.queryType) newErrors.queryType = "Please select a query type.";
+    if (!values.message.trim()) newErrors.message = "Please enter your message.";
+    if (!values.agree) newErrors.agree = "You must agree to be contacted.";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value, type, checked } = e.target;
-
     setValues({
       ...values,
-      [name]: type === "checkbox" ? checked : value, // For radio buttons, update the `value`
+      [name]: type === "checkbox" ? checked : value,
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validate()) {
-      console.log("Form submitted successfully:", values);
+      setToastMessage("Message Sent!");
+      console.log("Form submitted:", values);
+  
+      try {
+        const response = await fetch("/.netlify/functions/sendEmail", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values), // Send form data to the backend
+        });
+  
+        if (response.ok) {
+          console.log("Confirmation email sent successfully.");
+        } else {
+          console.log("Failed to send email.");
+        }
+      } catch (error) {
+        console.log("Error sending email:", error);
+      }
+  
+      setValues({
+        firstName: "",
+        lastName: "",
+        email: "",
+        queryType: "",
+        message: "",
+        agree: false,
+      });
     } else {
       console.log("Form validation failed.");
     }
   };
+  
 
   return (
-    <div className="w-full flex items-center justify-center px-3 py-[8rem] lg:h-screen">
+    <div className="w-full flex items-center justify-center px-3 py-[8rem] lg:h-screen relative">
+    <div className="w-full flex flex-col gap-4 max-w-[700px] mx-auto">
+       {/* Toast Notification */}
+       {toastMessage && <Toast message={toastMessage} onClose={() => setToastMessage(null)} />}
       <form
-        className="bg-white w-full rounded-md max-w-[700px] mx-auto px-6 py-4 flex flex-col gap-8"
+        className="bg-white w-full rounded-md px-6 py-4 flex flex-col gap-8"
         onSubmit={handleSubmit}
       >
         <h1 className="text-2xl font-extrabold">Contact Us</h1>
@@ -113,9 +120,7 @@ const Form = () => {
             <label className="absolute left-3 -top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:-top-2 peer-focus:text-sm peer-focus:text-blue-500 bg-white px-1 z-10">
               First Name
             </label>
-            {errors.firstName && (
-              <p style={{ color: "red" }}>{errors.firstName}</p>
-            )}
+            {errors.firstName && <p style={{ color: "red" }}>{errors.firstName}</p>}
           </div>
 
           <div className="relative md:flex-1">
@@ -130,12 +135,11 @@ const Form = () => {
             <label className="absolute left-3 -top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:-top-2 peer-focus:text-sm peer-focus:text-blue-500 bg-white px-1 z-10">
               Last Name
             </label>
-            {errors.lastName && (
-              <p style={{ color: "red" }}>{errors.lastName}</p>
-            )}
+            {errors.lastName && <p style={{ color: "red" }}>{errors.lastName}</p>}
           </div>
         </div>
 
+        {/* Email Input */}
         <div className="relative">
           <input
             type="email"
@@ -207,6 +211,7 @@ const Form = () => {
           {errors.agree && <p className="block text-red-500">{errors.agree}</p>}
         </div>
 
+        {/* Submit Button */}
         <button
           type="submit"
           className="w-full bg-[#0c7d69] p-2 rounded-md hover:opacity-90 cursor-pointer text-white font-bold"
@@ -214,6 +219,9 @@ const Form = () => {
           Submit
         </button>
       </form>
+    </div>
+
+      
     </div>
   );
 };
