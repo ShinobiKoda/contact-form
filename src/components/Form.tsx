@@ -51,11 +51,19 @@ const Form = () => {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
-    const { name, value, type, checked } = e.target;
-    setValues({
-      ...values,
-      [name]: type === "checkbox" ? checked : value,
-    });
+    const { name, value, type } = e.target;
+    if (type === "checkbox" || type === "radio") {
+      const { checked } = e.target as HTMLInputElement;
+      setValues({
+        ...values,
+        [name]: checked,
+      });
+    } else {
+      setValues({
+        ...values,
+        [name]: value,
+      });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -94,7 +102,6 @@ const Form = () => {
       console.log("Form validation failed.");
     }
   };
-  
 
   return (
     <div className="w-full flex items-center justify-center px-3 py-[8rem] lg:h-screen relative">
