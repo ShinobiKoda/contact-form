@@ -71,16 +71,17 @@ const Form = () => {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
   ) => {
     const { name, value, type, checked } = e.target;
-  
+
     setValues({
       ...values,
-      [name]: type === "checkbox" ? checked : value, // Only use `checked` for checkboxes
+      [name]: type === "checkbox" ? checked : value, // For radio buttons, update the `value`
     });
   };
-  
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -192,16 +193,18 @@ const Form = () => {
           {errors.message && <p style={{ color: "red" }}>{errors.message}</p>}
         </div>
 
-        <div className="flex gap-2 items-center">
-          <input
-            type="checkbox"
-            name="agree"
-            id="agree"
-            checked={values.agree || false}
-            onChange={handleChange}
-          />
-          <span>I agree to being contacted by the team</span>
-          {errors.agree && <p className="block text-red-700" >{errors.agree}</p>}
+        <div className="flex flex-col gap-2">
+          <div className="flex gap-2 items-center">
+            <input
+              type="checkbox"
+              name="agree"
+              id="agree"
+              checked={values.agree || false}
+              onChange={handleChange}
+            />
+            <span>I agree to being contacted by the team</span>
+          </div>
+          {errors.agree && <p className="block text-red-500">{errors.agree}</p>}
         </div>
 
         <button
