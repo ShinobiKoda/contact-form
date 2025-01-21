@@ -76,10 +76,17 @@ const Form = () => {
     if (validate()) {
       setToastMessage("Message Sent!");
       console.log("Form submitted:", values);
+      setValues({
+        firstName: "",
+        lastName: "",
+        email: "",
+        queryType: "",
+        message: "",
+        agree: false,
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
-      
   };
-  
 
   return (
     <div className="w-full flex items-center justify-center px-3 py-[8rem] lg:h-screen relative">
