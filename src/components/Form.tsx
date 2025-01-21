@@ -52,11 +52,16 @@ const Form = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value, type } = e.target;
-    if (type === "checkbox" || type === "radio") {
+    if (type === "checkbox") {
       const { checked } = e.target as HTMLInputElement;
       setValues({
         ...values,
         [name]: checked,
+      });
+    } else if (type === "radio") {
+      setValues({
+        ...values,
+        [name]: value,
       });
     } else {
       setValues({
@@ -71,37 +76,10 @@ const Form = () => {
     if (validate()) {
       setToastMessage("Message Sent!");
       console.log("Form submitted:", values);
-  
-      try {
-        const response = await fetch("/.netlify/functions/sendEmail", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(values), // Send form data to the backend
-        });
-  
-        if (response.ok) {
-          console.log("Confirmation email sent successfully.");
-        } else {
-          console.log("Failed to send email.");
-        }
-      } catch (error) {
-        console.log("Error sending email:", error);
-      }
-  
-      setValues({
-        firstName: "",
-        lastName: "",
-        email: "",
-        queryType: "",
-        message: "",
-        agree: false,
-      });
-    } else {
-      console.log("Form validation failed.");
     }
+      
   };
+  
 
   return (
     <div className="w-full flex items-center justify-center px-3 py-[8rem] lg:h-screen relative">
