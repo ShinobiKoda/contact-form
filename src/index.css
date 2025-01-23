@@ -17,3 +17,11 @@ body{
     background-color: #e0f1e7;
 }
 
+.toast-container {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+}
+

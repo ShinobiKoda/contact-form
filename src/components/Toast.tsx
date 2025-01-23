@@ -14,7 +14,7 @@ const Toast: React.FC<ToastProps> = ({ message, onClose }) => {
 
 
   return (
-    <div className="py-4 px-2 bg-[#2a4244] rounded-md w-full max-w-[300px] mx-auto flex flex-col gap-3 text-white absolute z-30 ">
+    <div className="toast-container py-4 px-2 bg-[#2a4244] rounded-md w-full max-w-[300px] mx-auto flex flex-col gap-3 text-white absolute z-30 ">
       <div className="flex items-center gap-3">
         <FaCheckCircle className="text-2xl text-white"></FaCheckCircle>
         <p>{message}</p>
